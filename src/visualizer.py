@@ -19,9 +19,6 @@ df_p.head(5)
 df_s = pd.read_csv(DATA_PATH_2)
 df_s.head(5)
 
-#df_c = pd.read_csv(DATA_PATH_3)
-#df_c.head(5)
-
 # Cleans and audits malicious_phish.csv
 def clean_and_audit(df):
     print("Shape:", df.shape)
@@ -54,6 +51,7 @@ def clean_and_audit(df):
 
     return df
 
+# shows bar chart comparing benign to phishing count
 def bar_chart(df):
     type_counts = df['type'].value_counts().sort_index()
     plt.figure(figsize=(6,4))
@@ -61,14 +59,41 @@ def bar_chart(df):
     plt.title("Type distribution (safety balance)")
     plt.xlabel('type'); plt.ylabel("count")
     plt.tight_layout(); plt.show()
-    
+
+# shows bar chart that shows the comparision between the two datasets
+# whether their urls and types match, are unique or conflicting (same url by different type)
+def compare_data_matches(df_1, df_2, label_col_1="type", label_col_2="type"):
+    def labels(df, col):
+        return df.drop_duplicates("url").set_index("url")[col].astype(str).str.lower()
+     
+    a, b = labels(df_1, label_col_1), labels(df_2, label_col_2)
+    shared = a.index.intersection(b.index)
+    matching = (a[shared] == b[shared]).sum()
+
+    counts = {
+    "Matching": matching,
+    "Unique": len(a) + len(b) - 2 * len(shared),
+    "Conflicting": len(shared) - matching,
+    }
+
+    plt.figure(figsize=(6, 4))
+    bars = plt.bar(list(counts), list(counts.values()), color=["#5b8dd9", "#4c9f70", "#d9534f"])
+    plt.bar_label(bars)
+    plt.title("Dataset overlap")
+    plt.ylabel("URLs")
+    plt.tight_layout()
+    plt.show()
+
+# removes duplicated lines from a dataset
+def label(df, col):
+    return df.drop_duplicates("url").set_index("url")[col].astype(str).str.lower()
+
 if __name__ == "__main__":
     clean_and_audit(df_p)
     clean_and_audit(df_s)
     # Bar graph of sourced dataset
     bar_chart(df_p)
     bar_chart(df_s)
-    #bar_chart(df_c)
 
     # bar graph of combined dataset
-    
+    compare_data_matches(df_p, df_s, label_col_1="type", label_col_2="type")
