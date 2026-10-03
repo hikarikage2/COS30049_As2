@@ -26,8 +26,7 @@ SUSPICIOUS_WORDS = ( #suspicious words used in phishing urls
 
 FEATURE_COLUMNS = [ #feature names in order
     "url_length", "hostname_length",
-    "num_dots", "num_hyphens", "num_digits", 
-    "num_slashes",
+    "num_dots", "host_dots", "host_hyphens", "num_hyphens", "num_digits", "num_slashes",
     "has_ip_host", "has_at_symbol",
     "subdomain_count", "bad_tld", "suspicious_words",
 ]
@@ -52,6 +51,8 @@ def extract_features(url: str) -> dict:
             "url_length": len(url), #total characters in url
             "hostname_length": len(host), #characters in the domain name
             "num_dots": url.count("."), #dots in the url
+            "host_dots": host.count("."), #dots in the host
+            "host_hyphens": host.count("-"), # hyphens in the host
             "num_hyphens": url.count("-"), #hyphens in the url
             "num_digits": sum(c.isdigit() for c in url), #how many digits in the url
             "num_slashes": url.count("/"), #slashes in the url
