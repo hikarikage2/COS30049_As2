@@ -41,8 +41,6 @@ model.fit(X_train, y_train)
 
 # --- 4. evaluate ---
 y_pred = model.predict(X_test)
-print("\ntrain f1:", f1_score(y_train, model.predict(X_train))) #score on data the model has seen
-print("test f1: ", f1_score(y_test, y_pred)) #score on the unseen test set
 print("\naccuracy: ", accuracy_score(y_test, y_pred))
 print("precision:", precision_score(y_test, y_pred))
 print("recall:   ", recall_score(y_test, y_pred))
