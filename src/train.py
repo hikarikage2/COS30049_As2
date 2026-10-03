@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-from load_data import load_merged_dataset
+from data_processing import load_merged_dataset
 from features import extract_features_df
 
 # --- 1. load the data ---
@@ -41,6 +41,8 @@ model.fit(X_train, y_train)
 
 # --- 4. evaluate ---
 y_pred = model.predict(X_test)
+print("\ntrain f1:", f1_score(y_train, model.predict(X_train))) #score on data the model has seen
+print("test f1: ", f1_score(y_test, y_pred)) #score on the unseen test set
 print("\naccuracy: ", accuracy_score(y_test, y_pred))
 print("precision:", precision_score(y_test, y_pred))
 print("recall:   ", recall_score(y_test, y_pred))
