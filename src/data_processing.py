@@ -31,7 +31,7 @@ def load_merged_dataset():
              .str.replace("[.]", ".", regex=False) #defanged dots so can process
              .str.replace("hxxp", "http", regex=False) #defanged urls so can process
              .str.replace(r"^[a-z]+://", "", regex=True) #removes http:// https://
-             .str.replace(r"^www\.", "", regex=True) #removes www.
+             .str.replace(r"^www\d*\.", "", regex=True) #removes www. www1. www2. etc
              .str.rstrip("/") #removes extra slashes
              .str[:2048]) #caps long urls
     
